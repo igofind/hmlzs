@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!-- annotation config -->
+    <mvc:annotation-driven/>
+    <context:component-scan base-package="com"/>
+
+    <!-- properties -->
+    <bean id="placeholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:fileEncoding="UTF-8">
+        <property name="locations">
+            <list>
+                <value>classpath:log4j.properties</value>
+                <value>classpath:system.properties</value>
+                <value>classpath:velocity.properties</value>
+
+                <!--local-->
+                <value>classpath:system.d.properties</value>
+
+                <!--online-->
+                <!--<value>classpath:system.p.properties</value>-->
+            </list>
+        </property>
+    </bean>
+
+    <!-- system Config -->
+    <bean class="com.core.config.Config"
+          c:platform="${config.platform}"
+          c:database="${config.database}"
+          p:domain="${config.hmlzs.domain}"
+          p:listDomain="${config.hmlzs.domain.list}"
+          p:listParam="${config.hmlzs.domain.list.param}"
+          p:staticResourceURLPrefix="${config.hmlzs.static.resource.prefix}"
+          p:homePageFocusBigImg="${config.homepage.img.focus.big}"
+          p:homePageFocusSmallImg="${config.homepage.img.focus.small}"
+          p:homePageLifeImg="${config.homepage.img.life}"
+          p:homePageCorpusImg="${config.homepage.img.corpus}"
+          p:homePageZhuYingImg="${config.homepage.img.zhuying}"
+          p:initialPwd="${config.initialPwd}"
+          p:dbIdBuffSize="${db.id.buffSize}"
+          p:articleIdAddend="${db.article.id.addend}"
+          p:templateDir="${template.upload.dir}"
+          p:previewDir="${velocity.output.preview}">
+    </bean>
+
+    <bean name="analyzer" class="org.wltea.analyzer.lucene.IKAnalyzer"></bean>
+    <bean class="com.core.util.LuceneConfig"
+          p:analyzer-ref="analyzer"
+          p:indexDir="${lucene.indexDir}"
+          p:defaultSearchField="${lucene.defaultSearchField}"
+          p:preTag="${lucene.preTag}"
+          p:postTag="${lucene.postTag}"
+            >
+    </bean>
+
+    <!-- NamedParameterJdbcTemplate-->
+    <bean class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
+          c:dataSource-ref="dataSource"/>
+
+    <bean id="sqlBuilder" class="com.core.repository.sqlBuilder.MySqlBuilder"/>
+
+    <!-- dataSource -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          p:driverClassName="${db.driver}"
+          p:url="${db.url}"
+          p:username="${db.username}"
+          p:password="${db.password}"
+          p:validationQuery="SELECT 1"
+            />
+
+    <!-- tx -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="
+			execution(* com.core.service.*.*create*(..))
+			|| execution(* com.core.service.*.*update*(..))
+			|| execution(* com.core.service.*.*delete*(..))
+		"/>
+    </aop:config>
+
+    <!-- cacheClient -->
+    <bean id="cacheClient" class="com.core.cache.MemClient"></bean>
+    <!-- memcached -->
+    <bean id="memCachedClient" class="com.whalin.MemCached.MemCachedClient"></bean>
+
+    <bean id="sockIOPool" class="com.whalin.MemCached.SockIOPool" init-method="initialize" factory-method="getInstance"
+          destroy-method="shutDown"
+          p:servers="${memcached.servers}"
+          p:nagle="${memcached.nagle}"
+          p:maxIdle="${memcached.maxIdle}"
+          p:initConn="${memcached.initConn}"
+          p:minConn="${memcached.minConn}"
+          p:maxConn="${memcached.maxConn}"
+          p:maintSleep="${memcached.maintSleep}"
+          p:socketConnectTO="${memcached.socketConnectTO}"
+          p:socketTO="${memcached.socketTO}"/>
+
+
+    <!--Spring MVC config: spring mvc as the context (not spring) -->
+    <!-- view resolver-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!-- Velocity config: just velocity , not included spring's viewResolver -->
+    <bean id="velocityEngine" class="org.apache.velocity.app.VelocityEngine">
+        <constructor-arg name="p">
+            <!-- The map will be cast to props .-->
+            <map>
+                <entry key="resource.loader" value="${resource.loader}"/>
+                <entry key="file.resource.loader.class" value="${file.resource.loader.class}"/>
+                <entry key="file.resource.loader.path" value="${file.resource.loader.path}"/>
+                <entry key="input.encoding" value="${velocity.input.encoding}"></entry>
+                <entry key="out.encoding" value="${velocity.output.encoding}"></entry>
+
+                <entry key="runtime.log.logsystem.class" value="${runtime.log.logsystem.class}"></entry>
+                <entry key="runtime.log.logsystem.log4j.logger" value="${runtime.log.logsystem.log4j.logger}"></entry>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean class="org.apache.velocity.tools.ToolManager"
+          c:autoConfig="true"
+          c:includeDefaults="true"
+          p:velocityEngine-ref="velocityEngine"
+            />
+    <aop:aspectj-autoproxy/>
+
+    <!-- Jackson json -->
+    <bean class="org.codehaus.jackson.JsonFactory"></bean>
+    <bean class="org.codehaus.jackson.map.ObjectMapper">
+        <property name="dateFormat">
+            <bean class="java.text.SimpleDateFormat" c:_0="yyyy-MM-dd HH:mm:ss"></bean>
+        </property>
+    </bean>
+
+    <!-- Commons fileUpload -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          p:defaultEncoding="${template.upload.defaultEncoding}"
+          p:uploadTempDir="${template.upload.temp}"/>
+
+
+    <bean id="securitySupport" class="com.core.security.SecuritySupport" scope="prototype"></bean>
+
+    <bean class="com.core.security.SupportFactory">
+        <lookup-method name="getSecuritySupport" bean="securitySupport"></lookup-method>
+    </bean>
+
+    <bean class="com.core.security.RightBuilder"></bean>
+
+    <!-- qiniu upload -->
+    <bean class="com.qiniu.storage.UploadManager"></bean>
+
+    <bean class="com.core.util.QiniuAuthUtil"
+          c:_0="${qiniu.accessKey}"
+          c:_1="${qiniu.secretKey}"
+          c:_2="${qiniu.bucket}"
+          c:_3="${qiniu.file.access.domain}">
+    </bean>
+</beans>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tools>
+
+       <toolbox scope="session">
+              <property name="create-session" value="true" type="boolean"/>
+              <tool key="map" class="java.util.HashMap"/>
+       </toolbox>
+
+       <toolbox scope="application">
+              <tool class="org.apache.velocity.tools.generic.DateTool"/>
+       </toolbox>
+
+       <data key="foo" value="this is foo."/>
+       <data key="bar">this is bar.</data>
+</tools>

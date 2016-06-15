@@ -1,0 +1,45 @@
+document.write(
+## 广种福田
+'<div class="layer1 gzft">'+
+    '<h2><span><em>$futian[0]</em><a href="$futian[1]">更多></a></span></h2>'+
+
+    '<p>$futian[2]</p>'+
+
+    '<div class="bank">'+
+        '<table>'+
+            '<thead>'+
+            '<tr>'+
+                '<td class="first">用途</td>'+
+                '<td>开户行</td>'+
+                '<td>户名</td>'+
+                '<td>账号</td>'+
+            '</tr>'+
+            '</thead>'+
+            '<tbody>'+
+            '<tr>'+
+                '<td class="first">$futian[3]</td>'+
+                '<td>$futian[4]</td>'+
+                '<td>$futian[5]</td>'+
+                '<td>$futian[6]</td>'+
+            '</tr>'+
+            '</tbody>'+
+        '</table>'+
+    '</div>'+
+'</div>'+
+
+'<div class="layer1 contact" id="contact">'+
+    '<h2><span><em>联系我们</em>'+
+        #if($detail)
+            '<a href="$detail" target="_blank">详细></a>'+
+        #end
+    '</span></h2>'+
+    '<ul>'+
+        '<li><span>地址：</span>湖北省黄梅县苦竹乡紫云山老祖寺</li>'+
+        '<li><span>客堂电话：</span>13409841633</li>'+
+        '<li><span>QQ群：</span>389695303</li>'+
+    '</ul>'+
+    '<div class="map">'+
+        '<img src=${resURLPrefix}/static/lzs/images/map-1.jpg alt=""/>'+
+    '</div>'+
+'</div>'
+)

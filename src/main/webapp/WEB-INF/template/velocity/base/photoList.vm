@@ -1,0 +1,66 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+#parse("/base/head.vm")
+<div class="navbar">
+    <div class="wrapper" id="navbar">
+        <script type="text/javascript" src=${resURLPrefix}/base/nav.html></script>
+    </div>
+</div>
+<div class="content">
+    <div class="notice">
+        <span class="icon left"></span>
+
+        <p>
+            <strong>活动通知</strong>
+            <script type="text/javascript" src=${resURLPrefix}/base/notice.html></script>
+        </p>
+        <span class="icon right"></span>
+    </div>
+    <div class="breadcrumb">
+        当前位置：<a href="#">${list.category}</a>
+    </div>
+
+    <div class="layer2 layer2-2 photo-list">
+        <ul>
+            <c:if test="${!list.listEmpty}">
+                <c:forEach var="item" items="${list.data}">
+                    <li>
+                        <a href="${item.url}" target="_blank"><img src="${item.image}" alt=""/></a>
+                        <p><a href="${item.url}" target="_blank">${item.title}</a></p>
+                    </li>
+                </c:forEach>
+            </c:if>
+            <c:if test="${list.listEmpty}">
+                <li><span style="color:red;text-align: center; background: none">(当前列表为空)</span>
+                </li>
+            </c:if>
+        </ul>
+        <div class="paginator">
+        </div>
+    </div>
+
+    <script type="text/javascript" src=${resURLPrefix}/base/fawu.html></script>
+    <script type="text/javascript" src=${resURLPrefix}/base/futian.html></script>
+
+</div>
+<!-- /content -->
+
+#include("/base/foot.vm")
+</div>
+#parse("/base/script.vm")
+
+<script>
+    // nav current category
+    var liIndex = ${list.categoryId} -1;
+    if($('#navbar > ul > li').length > liIndex){
+        $('#navbar > ul > li:eq("' + liIndex + '")').addClass("current").siblings().removeClass("current");
+    }else{
+        $('#navbar > ul > li').removeClass("current");
+    }
+    var pageCnt = ${list.totalPage};
+    var page = ${list.pageNum};
+    var listUrl = ${listUrl};
+</script>
+<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/paginate.js></script>
+</body>
+</html>

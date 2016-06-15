@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Cache-control" content="max-age=3600">
+
+    <title>${winTitle}</title>
+    <meta name="author" content="4what"/>
+    <meta name="description" content="黄梅老祖寺 ${depict}"/>
+    <meta name="keywords" content="黄梅老祖寺"/>
+
+    <link rel="stylesheet" type="text/css" href="${resURLPrefix}/static/lzs/css/style.css"/>
+</head>
+
+<body>
+<div class="main">
+    <div class="container">
+        <div class="topbar">
+            <div class="wrapper">
+		<span class="welcome">
+			<em>欢迎来到黄梅老祖寺首页</em>
+			<span class="datetime"></span>
+            </span>
+		<span class="tools">
+			<a href="javascript: void(0);" onclick="addFavorite();">收藏本站</a> |
+			<a href="javascript: void(0);" onclick="setHome();">设为首页</a> |
+			<a href="#contact">来访路线</a> |
+			<a href="javascript: void(0);">微信公众号</a>
+		</span>
+            </div>
+        </div>
+
+        <div class="header">
+            <div class="wrapper">
+                <h1><a href="http://www.hmlzs.org"><img src="${resURLPrefix}/static/lzs/images/logo.png" alt="黄梅老祖寺"/></a></h1>
+
+                <form action="${listURLPrefix}/search" method="get" id="search-frm" class="search">
+                    <div>
+                        <div class="keyword"><input type="text" name="kw" value=""/></div>
+                        <input type="submit" name="" value="搜索" class="submit"/>
+                    </div>
+                    <input type="hidden" name="pn" class="pn" value=""/>
+                    <input type="hidden" name="c" class="c" value=""/>
+                    <input type="hidden" name="t" class="t" value=""/>
+                </form>
+                <div class="qrcode"></div>
+            </div>
+        </div>

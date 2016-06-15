@@ -1,0 +1,17 @@
+document.write(
+'<ul>'+
+    #set($ulSize = $nav.ul.size() - 1)
+    #foreach($index  in [0..$ulSize])
+        #if($index == 0)
+            '<li class="current"><a href="$nav.ul.get($index)[1]">$nav.ul.get($index)[0]</a></li>'+
+        #else
+            '<li><a href="$nav.ul.get($index)[1]">$nav.ul.get($index)[0]</a></li>'+
+        #end
+    #end
+'</ul>'+
+'<ol>'+
+    #foreach($item in $nav.ol)
+        '<li><a href="$item[1]">$item[0]</a></li>'+
+    #end
+'</ol>'
+);

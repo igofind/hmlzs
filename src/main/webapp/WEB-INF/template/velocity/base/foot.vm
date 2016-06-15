@@ -1,0 +1,10 @@
+<!-- footer -->
+<div class="footer">
+    &copy; 2006-<span id="year">0</span> 黄梅老祖寺 鄂ICP备06004601号
+</div>
+
+<!-- /container -->
+
+<div class="gototop">
+    <a href="#"><span>回顶部</span><em></em></a>
+</div>

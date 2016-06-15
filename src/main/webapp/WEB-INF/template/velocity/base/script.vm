@@ -1,0 +1,81 @@
+<!-- /main -->
+<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/header.js></script>
+
+<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/jquery/jquery-1.8.3.min.js></script>
+
+<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/jquery/plugin/jquery.cycle.all.js></script>
+
+<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/audiojs/audio.min.js></script>
+
+<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/jquery.qrcode.min.js></script>
+
+##<script type="text/javascript" src="http://www.4what.cn/js/util.jquery-1.1.js"></script>
+##<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/util.jquery-1.1.js></script>
+
+##<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/script.js></script>
+
+<!-- page analytics -->
+<script type="text/javascript" src=${resURLPrefix}/static/lzs/js/analytics.js></script>
+
+<script type="text/javascript">
+    $('.qrcode:eq(0)').qrcode({width: 64,height: 64,text: window.location.href})
+    $('#code').qrcode({width: 80,height: 80,text: window.location.href})
+    $('.qrcode > canvas').css({'margin-top': 10});
+</script>
+
+<script type="text/javascript">
+
+    var scroll = function (target, options) {
+        var defaults = {
+                    duration: 0, // {Number|String}
+                    offset: 0, // {Number}
+                    position: "bottom" // {String} "bottom|top"
+                },
+                settings = $.extend(defaults, options);
+
+        target = $(target);
+
+        var position = (function () {
+                    if (settings.position === "bottom") {
+                        var outerHeight = target.outerHeight(true);
+                        return function () {
+                            return $(window).height() - outerHeight - settings.offset;
+                        };
+                    } else {
+                        return function () {
+                            return settings.offset;
+                        };
+                    }
+                })(),
+
+                prop = function () {
+                    return {
+                        "top": $(window).scrollTop() + position()
+                        + "px" // for IE
+                    };
+                },
+
+                handler = (function () {
+                    return !settings.duration ?
+                            function () {
+                                target.css(prop());
+                            } :
+                            function () {
+                                target.stop().animate(prop(), settings.duration);
+                            };
+                })();
+
+        $(window).bind("load resize scroll", handler);
+    }
+
+    // gototop
+    scroll($(".gototop"), {
+        // duration: "slow",
+        offset: 16
+    });
+
+    // header
+    document.getElementsByClassName("datetime")[0].innerText = " " + getCalStr();
+    // footer
+    document.getElementById("year").innerText = new Date().getFullYear();
+</script>

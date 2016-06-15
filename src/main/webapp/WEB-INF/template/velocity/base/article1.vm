@@ -1,0 +1,58 @@
+#parse("/base/head.vm")
+<div class="navbar">
+    <div class="wrapper" id="navbar">
+        <script type="text/javascript" src=${resURLPrefix}/base/nav.html></script>
+    </div>
+</div>
+<div class="content">
+    <div class="notice">
+        <span class="icon left"></span>
+
+        <p>
+            <strong>活动通知</strong>
+            <script type="text/javascript" src=${resURLPrefix}/base/notice.html></script>
+        </p>
+        <span class="icon right"></span>
+    </div>
+
+    <div class="breadcrumb">
+        当前位置：#if($article.showCategory) <a href="$article.categoryUrl">$article.category</a> > #end $article.title
+    </div>
+
+    <div class="layer2 layer2-1 article">
+        <h2>$article.title</h2>
+
+        <div class="source">
+            　$article.publishDate　来源：$article.source
+            　作者：$article.author
+        </div>
+        <div class="detail">
+            $article.content
+        </div>
+        <div class="qrcode">
+            <div id="code"></div>
+
+            <p>扫二维码 转发微博</p>
+        </div>
+    </div>
+    <div class="rightside">
+    <script type="text/javascript" src=${resURLPrefix}/base/fawu.html></script>
+    <script type="text/javascript" src=${resURLPrefix}/base/futian.html></script>
+</div>
+</div>
+
+#include("/base/foot.vm")
+
+</div>
+#parse("/base/script.vm")
+<script>
+    // nav current category
+    var liIndex = $article.categoryId -1;
+    if($('#navbar > ul > li').length > liIndex){
+        $('#navbar > ul > li:eq("' + liIndex + '")').addClass("current").siblings().removeClass("current");
+    }else{
+        $('#navbar > ul > li').removeClass("current");
+    }
+</script>
+</body>
+</html>

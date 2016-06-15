@@ -1,0 +1,4 @@
+document.write(
+'<div class="left"><img src="$banner[0]" alt=""/></div>'+
+'<div class="right"><img src="$banner[1]" alt=""/></div>'
+)
